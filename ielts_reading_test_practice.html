@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Lê Hằng English - IELTS Reading Interactive Mock Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #FF8DA1;
+            --primary-purple: #8854C0;
+            --primary-yellow: #FDCB6E;
+            --primary-teal: #00C9A7;
+            --bg-correct: #00D26A;
+            --bg-wrong: #FF4757;
+            --text-dark: #2D3436;
+            --pastel-highlight: #FFD1DC;
+            --card-shadow: 0 8px 0 #E0E0E0;
+            --btn-shadow-pink: 0 5px 0 #D65A71;
+            --btn-shadow-teal: 0 5px 0 #00997F;
+            --btn-shadow-yellow: 0 5px 0 #D9AE4E;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #FFD1DC, #E8D3FF, #D4FAFC, #FFF3D1);
+            background-size: 400% 400%;
+            animation: gradientAnimateLoop 12s ease infinite;
+            color: var(--text-dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientAnimateLoop {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 100 100'%3E%3Ctext x='15' y='30' font-size='20' opacity='0.2'%3E⭐%3C/text%3E%3Ctext x='70' y='25' font-size='18' opacity='0.2'%3E🌸%3C/text%3E%3Ctext x='45' y='75' font-size='22' opacity='0.15'%3E🐱%3C/text%3E%3Ctext x='80' y='80' font-size='16' opacity='0.2'%3E✨%3C/text%3E%3C/svg%3E");
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Top Navigation Bar */
+        #top-control-bar {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.94);
+            padding: 14px 28px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--primary-pink);
+        }
+
+        .header-title h2 {
+            font-size: 13px;
+            color: #7f8c8d;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title h1 {
+            font-size: 22px;
+            color: var(--primary-purple);
+            font-weight: 700;
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .timer-btn {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 18px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: var(--btn-shadow-pink);
+            transition: all 0.1s ease;
+        }
+
+        .timer-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 transparent;
+        }
+
+        #timer-display {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--primary-purple);
+            background: #fff;
+            padding: 6px 20px;
+            border-radius: 14px;
+            border: 3px solid var(--primary-purple);
+            min-width: 95px;
+            text-align: center;
+        }
+
+        .progress-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .global-progress {
+            width: 220px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            height: 18px;
+            overflow: hidden;
+            border: 2px solid #ccc;
+        }
+
+        #global-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-teal), var(--bg-correct));
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Tab Menus */
+        .tab-navigation {
+            display: flex;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 24px 0;
+            gap: 8px;
+            z-index: 10;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            background: #e0e0e0;
+            border: 3px solid #ccc;
+            border-bottom: none;
+            padding: 12px 24px;
+            border-radius: 16px 16px 0 0;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s ease;
+            box-shadow: 0 -3px 0 rgba(0,0,0,0.02) inset;
+            white-space: nowrap;
+        }
+
+        .tab-button.active {
+            background: white;
+            border-color: var(--primary-pink);
+            color: var(--primary-purple);
+            transform: translateY(2px);
+            padding-bottom: 12px;
+        }
+
+        /* Split-Screen Workspace */
+        .main-workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            z-index: 5;
+        }
+
+        .tab-content-wrapper {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tab-content-wrapper.active {
+            display: flex;
+        }
+
+        .left-pane, .right-pane {
+            width: 50%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 30px;
+            scroll-behavior: smooth;
+        }
+
+        /* Scrollbar styling */
+        .left-pane::-webkit-scrollbar, .right-pane::-webkit-scrollbar {
+            width: 8px;
+        }
+        .left-pane::-webkit-scrollbar-thumb, .right-pane::-webkit-scrollbar-thumb {
+            background: rgba(136, 84, 192, 0.2);
+            border-radius: 4px;
+        }
+        .left-pane::-webkit-scrollbar-thumb:hover, .right-pane::-webkit-scrollbar-thumb:hover {
+            background: rgba(136, 84, 192, 0.4);
+        }
+
+        .left-pane {
+            background: rgba(255, 255, 255, 0.9);
+            border-right: 4px dashed var(--primary-pink);
+        }
+
+        .right-pane {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Reading Passage Blocks */
+        .passage-section-title {
+            color: var(--primary-purple);
+            margin: 24px 0 16px 0;
+            font-size: 21px;
+            border-bottom: 4px solid var(--primary-teal);
+            padding-bottom: 6px;
+            display: inline-block;
+        }
+
+        .paragraph-block {
+            margin-bottom: 26px;
+            line-height: 1.8;
+            font-size: 17px;
+            text-align: justify;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+            border: 3px solid #eaeaea;
+            transition: border-color 0.2s ease;
+        }
+
+        .paragraph-block:hover {
+            border-color: var(--primary-pink);
+        }
+
+        .translation-btn {
+            background: var(--primary-yellow);
+            color: #5c4308;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 14px;
+            display: inline-block;
+            box-shadow: var(--btn-shadow-yellow);
+            transition: all 0.1s;
+        }
+
+        .translation-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 0px 0 transparent;
+        }
+
+        .translation-text {
+            display: none;
+            margin-top: 14px;
+            padding: 16px;
+            background: #fffef4;
+            border-left: 5px solid var(--primary-yellow);
+            border-radius: 12px;
+            font-style: italic;
+            color: #444;
+            font-size: 16px;
+            line-height: 1.7;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02) inset;
+        }
+
+        /* Highlight Selection Style */
+        .left-pane p::selection, .left-pane div::selection, .left-pane span::selection, .left-pane h2::selection, .left-pane li::selection {
+            background-color: var(--pastel-highlight);
+            color: #000;
+        }
+
+        /* Interactive Cards */
+        .exercise-card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: var(--card-shadow);
+            border: 3px solid #e6e6e6;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 #dbdbdb;
+        }
+
+        .question-header {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        /* 3D Dropdown Controls */
+        .custom-select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 18px;
+            border: 3px solid #e0e0e0;
+            font-size: 16px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            background-color: #fafafa;
+            box-shadow: 0 4px 0 #e0e0e0;
+            transition: all 0.1s ease;
+        }
+
+        .custom-select:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #e0e0e0;
+        }
+
+        /* Multiple Choice Button Layout */
+        .options-vertical-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option-button-ui {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 18px;
+            padding: 15px 22px;
+            text-align: left;
+            font-size: 15.5px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #e0e0e0;
+            transition: transform 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .option-button-ui:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #d5d5d5;
+            border-color: var(--primary-pink);
+        }
+
+        .option-button-ui:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #e0e0e0;
+        }
+
+        /* Correct / Incorrect Themes */
+        .ui-correct-active {
+            background-color: var(--bg-correct) !important;
+            color: white !important;
+            border-color: #00b35b !important;
+            box-shadow: 0 5px 0 #008f48 !important;
+            transform: translateY(0px) !important;
+        }
+
+        .ui-wrong-active {
+            background-color: var(--bg-wrong) !important;
+            color: white !important;
+            border-color: #f73b4b !important;
+            box-shadow: 0 5px 0 #d62837 !important;
+            transform: translateY(0px) !important;
+            animation: cardWobbleShake 0.4s ease-in-out;
+        }
+
+        @keyframes cardWobbleShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* Explanations Viewports */
+        .explanation-viewport {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff5f7;
+            border: 3px dashed var(--primary-pink);
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .exp-data-row {
+            margin-bottom: 10px;
+            border-bottom: 1px dashed rgba(255, 141, 161, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .exp-data-row:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .exp-data-tag {
+            font-weight: 700;
+            color: var(--primary-purple);
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .evidence-locator-link-btn {
+            background: white;
+            border: 3px solid var(--primary-pink);
+            color: var(--primary-pink);
+            padding: 6px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 8px;
+            display: inline-block;
+            box-shadow: 0 3px 0 #ff8da1;
+            transition: all 0.1s ease;
+        }
+
+        .evidence-locator-link-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #ff8da1;
+        }
+
+        /* Footer Submission Strip */
+        .global-submit-strip {
+            padding: 20px;
+            text-align: center;
+            background: rgba(255,255,255,0.96);
+            border-top: 4px solid var(--primary-purple);
+            z-index: 10;
+        }
+
+        .grand-submit-btn {
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-pink));
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            padding: 16px 70px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #613691;
+            transition: all 0.1s ease;
+        }
+
+        .grand-submit-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #613691;
+        }
+
+        /* Modal Overlay Card */
+        .modal-view-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .performance-score-card {
+            background: white;
+            width: 92%;
+            max-width: 560px;
+            border-radius: 35px;
+            border: 6px solid var(--primary-purple);
+            padding: 40px 35px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: modalScaleZoom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalScaleZoom {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-main-heading {
+            font-size: 32px;
+            color: var(--primary-purple);
+            margin-bottom: 10px;
+        }
+
+        .numeric-score-render {
+            font-size: 70px;
+            color: var(--primary-pink);
+            font-weight: 700;
+            margin: 18px 0;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.03);
+        }
+
+        .dismiss-modal-action-btn {
+            background: var(--primary-teal);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: var(--btn-shadow-teal);
+            transition: all 0.1s ease;
+        }
+
+        .dismiss-modal-action-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 transparent;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Top Scoreboard Bar -->
+    <div id="top-control-bar">
+        <div class="header-title">
+            <h2>Giáo viên tạo: Ms Lê Hằng English</h2>
+            <h1>IELTS READING MOCK TEST</h1>
+        </div>
+        
+        <div class="timer-container">
+            <button class="timer-btn" id="timer-toggle-btn" onclick="triggerTimerState()">BẮT ĐẦU TÍNH GIỜ LÀM BÀI</button>
+            <div id="timer-display">25:00</div>
+        </div>
+
+        <div class="progress-box">
+            <span style="font-weight: 700; font-size: 13px; color:#555;">TIẾN ĐỘ HOÀN THÀNH:</span>
+            <div class="global-progress">
+                <div id="global-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-Tab Dashboard Links System -->
+    <div class="tab-navigation">
+        <button class="tab-button active" id="tab-link-1" onclick="activateWorkspaceTab(1)">BÀI TẬP 2: CLOZE MULTIPLE CHOICE</button>
+        <button class="tab-button" id="tab-link-2" onclick="activateWorkspaceTab(2)">BÀI TẬP 3: CLOZE PARAGRAPHS</button>
+        <button class="tab-button" id="tab-link-3" onclick="activateWorkspaceTab(3)">BÀI TẬP 4: COMPREHENSION MCQS</button>
+        <button class="tab-button" id="tab-link-4" onclick="activateWorkspaceTab(4)">BÀI TẬP 5: PHRASE MATCHING</button>
+    </div>
+
+    <div class="main-workspace">
+
+        <!-- ======================= WORKSPACE INTERFACE TAB 1 ======================= -->
+        <div id="tab-area-wrapper-1" class="tab-content-wrapper active">
+            <div class="left-pane">
+                <h2 class="passage-section-title">❶ My New Life on the Island</h2>
+                <div class="paragraph-block" id="p1-block-1">
+                    My life changed completely when I moved from London to Taggs Island. In my thirties, I lived in a small flat in the city. I worked hard in a <b>(1)_________</b> company and went to parties every weekend. I enjoyed the busy lifestyle, but I felt lonely sometimes. Then I met James. He lived on a houseboat on Taggs Island, a <b>(2)_________</b> place near London. At first, I thought living there was strange. I loved the city too much! But when we decided to have a baby, I moved to the island. The first months were <b>(3)_________</b>. I missed my old life and friends. But then I made new friends on the island. My neighbours were very friendly and helpful. Now I work from home on a boat and spend more time with my family. I don't miss <b>(4)_________</b> city parties anymore. My new lifestyle is calmer and happier. I found a real home.
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t1-bx-1')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t1-bx-1">Cuộc sống của tôi đã hoàn toàn thay đổi khi tôi chuyển từ London đến Đảo Taggs. Vào độ tuổi ba mươi, tôi sống trong một căn hộ nhỏ ở thành phố. Tôi đã làm việc chăm chỉ trong một công ty xuất bản và đi tiệc tùng vào mỗi cuối tuần. Tôi từng yêu thích lối sống bận rộn đó, nhưng đôi khi cũng cảm thấy cô đơn. Rồi tôi gặp James. Anh ấy sống trên một ngôi nhà thuyền tại Đảo Taggs, một nơi yên tĩnh gần London. Ban đầu, tôi đã nghĩ sống ở đó thật kỳ lạ. Tôi đã yêu thành phố quá nhiều! Nhưng khi chúng tôi quyết định sinh con, tôi đã chuyển đến hòn đảo. Những tháng đầu tiên thật khó khăn. Tôi nhớ cuộc sống cũ và bạn bè của mình. Nhưng sau đó tôi đã kết bạn mới trên đảo. Hàng xóm của tôi rất thân thiện và hay giúp đỡ. Giờ đây, tôi làm việc tại nhà trên một chiếc thuyền và dành nhiều thời gian hơn cho gia đình. Tôi không còn nhớ những bữa tiệc tùng nơi thành phố nữa. Lối sống mới của tôi bình yên và hạnh phúc hơn. Tôi đã tìm thấy một mái ấm thực sự.</div>
+                </div>
+
+                <h2 class="passage-section-title">❷ What Makes Life Meaningful?</h2>
+                <div class="paragraph-block" id="p1-block-2">
+                    Many people think happiness is <b>(1)______</b> most important thing in life. But psychologist Susie Orbach says we should think about something different. She believes a meaningful life comes from understanding our true feelings and <b>(2)______</b>. Orbach says we need to ask ourselves good questions. Why do we want certain things? What do we really need? When we understand these <b>(3)______</b>, we can live better lives. She also says helping other people is very important. When we give to others, make things, or join community activities, we feel good inside.
+                    <br><br>
+                    During difficult times, Orbach suggests <b>(4)______</b> at our problems from different angles. We should also notice small everyday moments—like having good conversations with friends or enjoying simple pleasures. These things help us feel connected and give our lives real meaning.
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t1-bx-2')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t1-bx-2">Nhiều người nghĩ rằng hạnh phúc là điều quan trọng nhất trong cuộc sống. Nhưng nhà tâm lý học Susie Orbach nói rằng chúng ta nên nghĩ về một điều gì đó khác biệt. Bà tin rằng một cuộc sống có ý nghĩa đến từ việc thấu hiểu cảm xúc thật và các nhu cầu của chính mình. Orbach khuyên chúng ta cần đặt ra những câu hỏi hay cho bản thân. Tại sao chúng ta muốn những thứ nhất định? Chúng ta thực sự cần gì? Khi thấu hiểu được các câu hỏi này, chúng ta có thể sống cuộc sống tốt đẹp hơn. Bà cũng nói rằng việc giúp đỡ người khác là vô cùng quan trọng. Khi chúng ta trao đi, sáng tạo, hoặc tham gia vào các hoạt động cộng đồng, chúng ta cảm thấy vui vẻ từ bên trong.
+                    <br><br>
+                    Trong những giai đoạn khó khăn, Orbach khuyên chúng ta nên nhìn nhận vấn đề của mình từ các khía cạnh khác nhau. Chúng ta cũng nên chú ý đến những khoảnh khắc nhỏ bé thường nhật—như trò chuyện vui vẻ với bạn bè hoặc tận hưởng những niềm vui giản đơn. Những điều này giúp chúng ta cảm thấy được kết nối và mang lại ý nghĩa thực sự cho cuộc sống.</div>
+                </div>
+            </div>
+            <div class="right-pane" id="exercise-render-zone-tab1"></div>
+        </div>
+
+        <!-- ======================= WORKSPACE INTERFACE TAB 2 ======================= -->
+        <div id="tab-area-wrapper-2" class="tab-content-wrapper">
+            <div class="left-pane">
+                <h2 class="passage-section-title">❶ The Truth About Love and Relationships</h2>
+                <div class="paragraph-block" id="p2-block-1">
+                    Many people believe in romantic "myths" about love. They think they must <b>(1)______</b> a strong feeling immediately when they meet someone special. <b>(2)______</b>, experts say this is not always true. Real love often grows slowly through shared values and mutual respect. Some people think good relationships should be easy and <b>(3)______</b>. This is wrong! All couples have problems and arguments. Fighting can actually be healthy <b>(4)______</b> it helps partners understand each other's needs better. The important thing is to communicate honestly. Another myth is that your partner must be your best friend and meet all your needs. This puts too much pressure <b>(5)______</b> one person. It's okay to have other friends and hobbies. Some couples even sleep in separate <b>(6)______</b> to get better rest, and their relationships are still strong and happy!
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t2-bx-1')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t2-bx-1">Nhiều người tin vào những "huyền thoại" lãng mạn về tình yêu. Họ nghĩ rằng họ phải cảm nhận được một cảm xúc mạnh mẽ ngay lập tức khi họ gặp một ai đó đặc biệt. Tuy nhiên, các chuyên gia nói rằng điều này không phải lúc nào cũng đúng. Tình yêu đích thực thường lớn dần lên một cách chậm rãi thông qua các giá trị chung và sự tôn trọng lẫn nhau. Một số người nghĩ rằng những mối quan hệ tốt đẹp thì phải dễ dàng và không tốn công sức. Điều này hoàn toàn sai lầm! Tất cả các cặp đôi đều có những vấn đề và tranh cãi. Việc tranh cãi thực ra lại có thể lành mạnh vì nó giúp các bên hiểu rõ hơn nhu cầu của nhau. Điều quan trọng là phải giao tiếp một cách chân thành. Một huyền thoại khác là đối phương phải là bạn thân nhất và đáp ứng mọi nhu cầu của bạn. Điều này đặt quá nhiều áp lực lên một người. Có thêm những người bạn khác và sở thích riêng là điều hoàn toàn bình thường. Thậm chí, một số cặp đôi còn ngủ ở các phòng riêng biệt để có được giấc ngủ ngon hơn, và mối quan hệ của họ vẫn rất bền chặt và hạnh phúc!</div>
+                </div>
+
+                <h2 class="passage-section-title">❷ A Teenage Girl's Problem</h2>
+                <div class="paragraph-block" id="p2-block-2">
+                    A 15-year-old girl wrote to ask for advice. She loves her boyfriend, but there is <b>(1)______</b> serious problem in their relationship. She must be very careful with everything she says because he gets upset easily. He becomes angry about small things and sometimes threatens to hurt himself. This makes her feel worried all the time. The girl cannot share her good news or feel happy because she is afraid he will be sad. Relationship expert Annalisa Barbieri says this is not healthy love. When you <b>(2)______</b> changing your behaviour to make someone happy all the time, the relationship is not good. The <b>(3)______</b> advice is that the girl cannot fix her boyfriend's problems. She is not responsible for his feelings. She needs <b>(4)______</b> to a trusted adult - like a parent or teacher - about this situation. It is very <b>(5)______</b> to set boundaries and protect herself. If someone threatens self-harm, she must tell an adult <b>(6)______</b>.
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t2-bx-2')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t2-bx-2">Một cô bé 15 tuổi đã viết thư để xin lời khuyên. Cô bé rất yêu bạn trai của mình, nhưng có một vấn đề nghiêm trọng trong mối quan hệ của họ. Cô phải cực kỳ cẩn thận với mọi điều mình nói vì cậu ấy rất dễ nổi giận. Cậu ấy tức giận vì những điều nhỏ nhặt và đôi khi đe dọa sẽ tự làm tổn thương mình. Điều này khiến cô bé luôn cảm thấy lo lắng. Cô bé không thể chia sẻ tin vui hay cảm thấy hạnh phúc vì sợ cậu ấy sẽ buồn. Chuyên gia mối quan hệ Annalisa Barbieri nói rằng đây không phải là một tình yêu lành mạnh. Khi bạn đang phải thay đổi hành vi của mình chỉ để làm ai đó vui lòng mọi lúc, mối quan hệ đó không hề tốt đẹp. Lời khuyên của chuyên gia là cô bé không thể giải quyết được các vấn đề của bạn trai. Cô không phải chịu trách nhiệm về cảm xúc của cậu ấy. Cô bé cần nói chuyện với một người lớn đáng tin cậy - như cha mẹ hoặc giáo viên - về tình huống này. Thiết lập các ranh giới và tự bảo vệ bản thân là vô cùng quan trọng. Nếu ai đó đe dọa tự tử, cô bé phải báo ngay cho người lớn ngay lập tức.</div>
+                </div>
+            </div>
+            <div class="right-pane" id="exercise-render-zone-tab2"></div>
+        </div>
+
+        <!-- ======================= WORKSPACE INTERFACE TAB 3 ======================= -->
+        <div id="tab-area-wrapper-3" class="tab-content-wrapper">
+            <div class="left-pane">
+                <h2 class="passage-section-title">❶ Tom and Rita's Blind Date</h2>
+                <div class="paragraph-block" id="p3-block-1">
+                    Tom and Rita went on a blind date last week. They met at a restaurant for dinner. At first, there was a small problem—the restaurant booked them for the wrong night! But they stayed and had a nice evening together.
+                    <br><br>
+                    During dinner, Tom and Rita talked about many things. They discussed food, their families, their jobs, and past dating experiences. Both of them found the conversation easy and enjoyable. Tom thought Rita was very friendly and kind. Rita also said Tom was a nice person and easy to talk to.
+                    <br><br>
+                    After dinner, they went for a drink together. Everything seemed good, but there was no romantic feeling between them. They did not kiss goodbye. At the end of the night, there was another awkward moment with Tom's tube card at the barrier.
+                    <br><br>
+                    Later, both Tom and Rita gave the date 7 out of 10 points. Tom said he didn't feel any romance. Rita agreed. However, the biggest problem appeared during their conversation. Tom told Rita he loves his cat very much and has one at home. Unfortunately, Rita is allergic to cats. She cannot be near them without feeling sick.
+                    <br><br>
+                    Rita decided not to meet Tom again. She explained her reason simply: "I would never want him to choose between his cat." It was a good date, but not a love match.
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t3-bx-1')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t3-bx-1">Tom và Rita đã đi xem mắt vào tuần trước. Họ gặp nhau tại một nhà hàng để ăn tối. Lúc đầu, có một sự cố nhỏ xảy ra—nhà hàng đã đặt lịch cho họ sai đêm! Nhưng họ vẫn ở lại và có một buổi tối vui vẻ cùng nhau.
+                    <br><br>
+                    Trong bữa tối, Tom và Rita đã trò chuyện về rất nhiều thứ. Họ thảo luận về đồ ăn, gia đình, công việc và những trải nghiệm hẹn hò trong quá khứ. Cả hai đều thấy cuộc trò chuyện rất tự nhiên và thú vị. Tom nghĩ Rita rất thân thiện và tốt bụng. Rita cũng nhận xét Tom là một người tử tế và dễ nói chuyện.
+                    <br><br>
+                    Sau bữa tối, họ cùng nhau đi uống nước. Mọi thứ có vẻ ổn, nhưng không hề có xúc cảm lãng mạn nào giữa họ. Họ không hôn tạm biệt nhau. Vào cuối buổi tối, lại có thêm một khoảnh khắc ngượng ngùng khác liên quan đến thẻ tàu điện ngầm của Tom ở cửa chắn.
+                    <br><br>
+                    Sau đó, cả Tom và Rita đều chấm điểm buổi hẹn là 7/10. Tom nói anh không cảm nhận được sự lãng mạn nào. Rita cũng đồng ý. Tuy nhiên, vấn đề lớn nhất đã xuất hiện trong cuộc trò chuyện của họ. Tom kể với Rita rằng anh rất yêu chú mèo của mình và đang nuôi một chú ở nhà. Không may thay, Rita lại bị dị ứng với mèo. Cô không thể ở gần chúng mà không bị ốm.
+                    <br><br>
+                    Rita quyết định sẽ không gặp lại Tom nữa. Cô giải thích lý do một cách đơn giản: "Tôi không bao giờ muốn anh ấy phải lựa chọn (giữa tôi và) chú mèo của mình." Đó là một buổi hẹn hò thú vị, nhưng không phải một cặp đôi định mệnh.</div>
+                </div>
+
+                <h2 class="passage-section-title">❷ A Family Problem</h2>
+                <div class="paragraph-block" id="p3-block-2">
+                    A doctor wrote to an advice column about a serious family problem. After her brother finished university, their father invited him to work in the family business. Later, her father gave her brother 80% of the company. Now the business is worth several million pounds, and her brother can sell it and retire early. He is very rich and comfortable.
+                    <br><br>
+                    The doctor's situation is very different. Her parents helped her pay for university fees and housing when she was younger. However, she still has many money problems now. She struggles to pay her mortgage and her basic living costs every month. She feels this is very unfair.
+                    <br><br>
+                    When the doctor talks to her parents about the problem, they become angry. They call her ungrateful. They say her brother deserves the business because he worked there for many years. The parents also remind her that they helped her with education and housing in the past.
+                    <br><br>
+                    An expert psychotherapist gives important advice. She says the real problem is not just about money. The doctor feels her parents love and value her brother more than her. She feels like a "second-rate" child in the family. She connects her self-worth to what her parents give her.
+                    <br><br>
+                    The expert suggests having an honest, brave conversation with her parents. She should talk about her feelings of exclusion and favouritism, not just the money. She should say clearly how much this situation hurts her emotionally.
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t3-bx-2')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t3-bx-2">Một nữ bác sĩ đã viết thư gửi chuyên mục tư vấn về một vấn đề gia đình nghiêm trọng. Sau khi em trai cô tốt nghiệp đại học, bố của họ đã mời cậu ấy về làm việc tại doanh nghiệp gia đình. Về sau, người bố đã trao cho cậu em trai 80% cổ phần công ty. Hiện tại doanh nghiệp này có giá trị hàng triệu bảng Anh, và người em trai có thể bán nó đi để nghỉ hưu sớm. Cậu ấy vô cùng giàu có và sống thoải mái.
+                    <br><br>
+                    Tình cảnh của cô bác sĩ thì rất khác biệt. Cha mẹ đã giúp đỡ cô chi trả học phí đại học và tiền nhà khi cô còn trẻ. Tuy nhiên, hiện tại cô vẫn gặp rất nhiều khó khăn về tài chính. Cô phải vật lộn để trả khoản nợ thế chấp nhà và các chi phí sinh hoạt cơ bản hàng tháng. Cô cảm thấy điều này vô cùng bất công.
+                    <br><br>
+                    Khi người bác sĩ nói chuyện với bố mẹ về vấn đề này, họ đã nổi giận. Họ mắng cô là kẻ vô ơn. Họ nói rằng em trai cô xứng đáng có được cơ nghiệp vì cậu ấy đã làm việc ở đó trong nhiều năm. Bố mẹ cũng nhắc nhở cô rằng họ từng giúp đỡ cô về việc học và nhà ở trong quá khứ.
+                    <br><br>
+                    Một nhà trị liệu tâm lý chuyên nghiệp đã đưa ra một lời khuyên quan trọng. Cô ấy nói rằng vấn đề thực sự không chỉ nằm ở tiền bạc. Người bác sĩ cảm thấy cha mẹ yêu thương và coi trọng em trai hơn cô. Cô cảm giác mình giống như một đứa con "hạng hai" trong gia đình. Cô đang gắn kết giá trị bản thân với những gì cha mẹ trao cho mình.
+                    <br><br>
+                    Chuyên gia gợi ý cô nên có một cuộc trò chuyện chân thành và dũng cảm với cha mẹ. Cô nên chia sẻ về cảm giác bị bỏ rơi và sự thiên vị, chứ không chỉ đơn thuần là tiền bạc. Cô cần phải nói rõ ràng tình huống này đã làm tổn hại đến cảm xúc cô nhiều như thế nào.</div>
+                </div>
+            </div>
+            <div class="right-pane" id="exercise-render-zone-tab3"></div>
+        </div>
+
+        <!-- ======================= WORKSPACE INTERFACE TAB 4 ======================= -->
+        <div id="tab-area-wrapper-4" class="tab-content-wrapper">
+            <div class="left-pane">
+                <h2 class="passage-section-title">❶ Start a Garden This New Year</h2>
+                <div class="paragraph-block" id="p4-block-1">
+                    Many people make New Year's resolutions to join a gym or start a diet. However, starting a garden can be a better choice. <b>(1) _________</b> It also helps reduce stress, gives you vitamin D from the sun, and doesn't cost as much as gym memberships.
+                    <br><br>
+                    If you are a beginner, it's important to start small. Don't try to plant too much at first. <b>(2) _________</b> If you plant too many things, you might feel tired and give up in the summer when weeds take over your garden.
+                    <br><br>
+                    Choose your plants carefully. Check how much sunlight, water, and what type of soil your plants need. Put plants in the right place where they can grow well. If your garden doesn't have enough sun, you can use movable containers instead.
+                    <br><br>
+                    Watering is very important for a healthy garden. Place your plants near a water source so it's easy to water them. Water deeply but not too often. <b>(3) _________</b> Drip irrigation or soaker hoses are simple and effective tools to use.
+                    <br><br>
+                    Use compost and mulch to help your plants. They provide nutrients and keep the soil moist. Also, remove weeds early before they grow big and compete with your plants. <b>(4) _________</b>
+                    <br><br>
+                    Don't worry if some plants die at first. Gardening is about learning and enjoying the outdoors. You will get better with practice!
+                    <br><br>
+                    <span style="font-weight: 700; color: var(--primary-purple);">Danh sách các câu được rút gọn để khớp nối:</span>
+                    <ul style="margin-left: 20px; font-size: 15px; margin-top: 5px;">
+                        <li><b>A.</b> Start with a few containers or a small flower bed.</li>
+                        <li><b>B.</b> This helps keep your plants healthy and saves water.</li>
+                        <li><b>C.</b> You can also grow vegetables that you like to eat.</li>
+                        <li><b>D.</b> Gardening gives you gentle exercise and time outdoors.</li>
+                    </ul>
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t4-bx-1')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t4-bx-1">Nhiều người đưa ra các quyết tâm năm mới như tham gia phòng tập gym hoặc bắt đầu ăn kiêng. Tuy nhiên, bắt đầu làm một khu vườn có thể là lựa chọn tuyệt vời hơn. <b>(1) [Làm vườn giúp bạn có hoạt động thể chất nhẹ nhàng và thời gian hòa mình vào thiên nhiên.]</b> Nó cũng giúp giảm căng thẳng, bổ sung vitamin D từ ánh mặt trời, và không tốn nhiều chi phí như phí tập gym.
+                    <br><br>
+                    If bạn là người mới bắt đầu, điều quan trọng là làm từ quy mô nhỏ. Đừng cố gắng gieo trồng quá nhiều lúc đầu. <b>(2) [Hãy bắt đầu với một vài chiếc thùng chứa hoặc một luống hoa nhỏ.]</b> Nếu trồng quá nhiều loại, bạn có thể thấy kiệt sức và dễ dàng từ bỏ vào mùa hè khi cỏ dại mọc tràn lan chiếm lấy khu vườn.
+                    <br><br>
+                    Hãy chọn lựa cây trồng cẩn thận. Kiểm tra xem cây cần bao nhiêu ánh sáng, nước và loại đất gì. Đặt cây ở đúng vị trí để chúng phát triển tốt. Nếu khu vườn thiếu nắng, bạn có thể chuyển sang dùng các thùng di động để thay thế.
+                    <br><br>
+                    Tưới nước là yếu tố sống còn cho một khu vườn khỏe mạnh. Hãy đặt các chậu cây gần nguồn nước để dễ tưới tiêu. Hãy tưới thật sâu nhưng đừng tưới quá thường xuyên. <b>(3) [Điều này giúp cây của bạn luôn khỏe mạnh và tiết kiệm nước.]</b> Hệ thống tưới nhỏ giọt hoặc vòi phun sương là những công cụ đơn giản mà vô cùng hiệu quả.
+                    <br><br>
+                    Hãy sử dụng phân hữu cơ và màng phủ nông nghiệp để hỗ trợ cây trồng. Chúng cung cấp các chất dinh dưỡng và giữ ẩm cho đất. Bên cạnh đó, hãy nhổ cỏ dại từ sớm trước khi chúng lớn lên và tranh giành tài nguyên của cây. <b>(4) [Bạn cũng có thể tự trồng các loại rau củ quả mà mình yêu thích.]</b>
+                    <br><br>
+                    Đừng quá lo lắng nếu lúc đầu có một vài chậu cây bị hỏng. Làm vườn là để học hỏi và tận hưởng bầu không khí ngoài trời. Bạn chắc chắn sẽ tiến bộ hơn khi thực hành thường xuyên!</div>
+                </div>
+
+                <h2 class="passage-section-title">❷ Surviving Office Holiday Parties</h2>
+                <div class="paragraph-block" id="p4-block-2">
+                    Office holiday parties can be difficult for introverts, shy people, and those with social anxiety. Not everyone is a party person, and that's okay. <b>(1) _________</b>
+                    <br><br>
+                    There are some simple things you can do to make the party easier. First, wear comfortable clothes so you feel relaxed. Arrive early when there are fewer people around. <b>(2) _________</b> If you stand at the edge of the room, you might feel more isolated and uncomfortable.
+                    <br><br>
+                    You don't have to stay at the party for a long time. It's fine to make a brief appearance and then leave politely. Before the party, prepare a few easy talking points. Use open-ended questions to keep conversations light and friendly. Avoid controversial topics like politics or religion. <b>(3) _________</b>
+                    <br><br>
+                    If there is silence during a conversation, don't panic. You don't need to fill every quiet moment. Don't assume that people are judging you negatively—this type of "mind reading" often leads to wrong interpretations.
+                    <br><br>
+                    Try to find allies or bring a supportive colleague with you. Look for people standing alone and approach them—they might feel nervous too. <b>(4) _________</b> For example, decide to talk to just one or two people, then leave. Remember, you can feel anxious and still attend. Often, you'll leave feeling accomplished!
+                    <br><br>
+                    <span style="font-weight: 700; color: var(--primary-purple);">Danh sách các câu được rút gọn để khớp nối:</span>
+                    <ul style="margin-left: 20px; font-size: 15px; margin-top: 5px;">
+                        <li><b>A.</b> When talking to senior leaders, keep your conversation short and courteous.</li>
+                        <li><b>B.</b> However, there is pressure in many workplaces to attend and look cheerful.</li>
+                        <li><b>C.</b> Position yourself toward the middle of the room, not hiding at the edges.</li>
+                        <li><b>D.</b> Set a clear intention and time limit before you go to the party.</li>
+                    </ul>
+                    <br><button class="translation-btn" onclick="toggleTranslationBox('t4-bx-2')">Mở dịch đoạn này 🌟</button>
+                    <div class="translation-text" id="t4-bx-2">Những bữa tiệc ngày lễ tại văn phòng có thể gây khó khăn cho những người hướng nội, nhút nhát hoặc những người mắc chứng lo âu xã hội. Không phải ai cũng là người của tiệc tùng, và điều đó hoàn toàn bình thường. <b>(1) [Tuy nhiên, luôn có một áp lực vô hình ở nơi công sở đòi hỏi bạn phải tham gia và tỏ ra vui tươi.]</b>
+                    <br><br>
+                    Có một vài điều đơn giản bạn có thể làm để buổi tiệc trở nên dễ chịu hơn. Đầu tiên, hãy mặc quần áo thoải mái để thấy thư giãn. Hãy đến sớm khi xung quanh chưa có quá đông người. <b>(2) [Hãy chủ động đứng dịch về phía trung tâm phòng, đừng trốn ở các góc khuất.]</b> Nếu bạn cứ đứng nép ở rìa phòng, bạn có thể cảm thấy cô độc và bất an hơn.
+                    <br><br>
+                    Bạn không bắt buộc phải ở lại bữa tiệc trong một khoảng thời gian quá dài. Việc xuất hiện một chút rồi ra về một cách lịch sự là hoàn toàn bình thường. Trước buổi tiệc, hãy chuẩn bị sẵn một vài chủ đề nói chuyện đơn giản. Sử dụng các câu hỏi mở để giữ cho cuộc trò chuyện nhẹ nhàng và côi mở. Tránh các chủ đề nhạy cảm như chính trị hoặc tôn giáo. <b>(3) [Khi trò chuyện với các lãnh đạo cấp cao, hãy giữ cuộc hội thoại ngắn gọn và lịch thiệp.]</b>
+                    <br><br>
+                    Nếu xuất hiện những khoảng lặng im lặng trong cuộc trò chuyện, bạn đừng lo lắng. Bạn không cần phải cố gắng lấp đầy mọi giây phút yên tĩnh đó. Đừng vội áp đặt suy nghĩ rằng người khác đang phán xét tiêu cực về bạn—kiểu tư duy "đọc vị tâm trí" này thường dẫn đến những diễn giải sai lầm.
+                    <br><br>
+                    Hãy cố gắng tìm kiếm đồng minh hoặc đi cùng một đồng nghiệp ủng hộ mình. Hãy tìm kiếm những ai đang đứng một mình và tiếp cận họ—họ có thể cũng đang lo lắng giống bạn. <b>(4) [Hãy thiết lập một mục tiêu rõ ràng và giới hạn thời gian trước khi bạn tới dự tiệc.]</b> Ví dụ, tự quyết định chỉ trò chuyện với một hoặc hai người, rồi sau đó ra về. Hãy nhớ rằng, bạn hoàn toàn có thể cảm thấy lo lắng nhưng vẫn tham gia đầy tự tin. Thông thường, bạn sẽ ra về với một cảm giác rất thành tựu!</div>
+                </div>
+            </div>
+            <div class="right-pane" id="exercise-render-zone-tab4"></div>
+        </div>
+
+    </div>
+
+    <!-- Page Footer submission action -->
+    <div class="global-submit-strip">
+        <button class="grand-submit-btn" onclick="evaluateEntireTestPerformance()">NỘP BÀI KIỂM TRA TỔNG HỢP</button>
+    </div>
+
+    <!-- Final results card dialog modal -->
+    <div class="modal-view-backdrop" id="score-modal-viewport">
+        <div class="performance-score-card">
+            <h2 class="modal-main-heading">🎉 KẾT QUẢ ĐIỂM SỐ BÀI LÀM 🎉</h2>
+            <div style="font-weight: 700; color: #555;">TỔNG SỐ CÂU ĐÚNG CỦA BẠN:</div>
+            <div class="numeric-score-render" id="modal-score-txt">0 / 38</div>
+            <p id="modal-comment-txt" style="font-size:17px; line-height:1.6; color:#444; margin-bottom:25px;"></p>
+            <button class="dismiss-modal-action-btn" onclick="closeDashboardModal()">Xem Lại Đáp Án Chi Tiết</button>
+        </div>
+    </div>
+
+    <script>
+        // Professional Pedagogical Academic DB (38 items)
+        const quizMasterData = [
+            // Exercise 2 - Text 1: My New Life on the Island
+            { id: 1, tab: 1, type: "mc", question: "Ex 2.❶ - Blank (1): I worked hard in a (1)_________ company...", options: ["to publish", "publishs", "publishing", "to publishing"], correct: "publishing", paragraphId: "p1-block-1", answerLabel: "C. publishing", evidence: "I worked hard in a (1)_________ company and went to parties every weekend.", translation: "Tôi đã làm việc chăm chỉ trong một công ty xuất bản và đi tiệc tùng vào mỗi cuối tuần.", synonyms: "publishing company = book publisher / press house", analysis: "Danh từ ghép 'publishing company' (công ty xuất bản) sử dụng danh động từ làm tính từ bổ nghĩa cho danh từ đứng sau. Phương án C hoàn toàn chính xác theo nguyên tắc kết hợp từ." },
+            { id: 2, tab: 1, type: "mc", question: "Ex 2.❶ - Blank (2): ...a (2)_________ place near London.", options: ["quietness", "quiet", "quieten", "quietening"], correct: "quiet", paragraphId: "p1-block-1", answerLabel: "B. quiet", evidence: "He lived on a houseboat on Taggs Island, a (2)_________ place near London.", translation: "Anh ấy sống trên một ngôi nhà thuyền tại Đảo Taggs, một nơi yên tĩnh gần London.", synonyms: "quiet = tranquil / peaceful / serene", analysis: "Vị trí trống nằm trước danh từ 'place' nên bắt buộc cần điền một tính từ (adjective) bổ nghĩa. 'Quiet' là tính từ gốc chỉ tính chất yên bình, yên lặng." },
+            { id: 3, tab: 1, type: "mc", question: "Ex 2.❶ - Blank (3): The first months were (3)_________.", options: ["difficult", "tiring", "hard", "stressful"], correct: "hard", paragraphId: "p1-block-1", answerLabel: "C. hard", evidence: "The first months were (3)_________.", translation: "Những tháng đầu tiên thật khó khăn.", synonyms: "hard = challenging / tough / strenuous", analysis: "Mặc dù 'difficult' đồng nghĩa, nhưng trong bài báo gốc của The Guardian tác giả Georgina Moore viết 'I found the change hard at first'. Đáp án 'hard' (C) là từ phù hợp nhất diễn tả sự khó khăn thử thách thuở ban đầu." },
+            { id: 4, tab: 1, type: "mc", question: "Ex 2.❶ - Blank (4): I don't miss (4)_________ city parties anymore.", options: ["Ø", "a", "an", "the"], correct: "the", paragraphId: "p1-block-1", answerLabel: "D. the", evidence: "I don't miss (4)_________ city parties anymore.", translation: "Tôi không còn nhớ những bữa tiệc tùng nơi thành phố nữa.", synonyms: "the city parties = those specific parties in London", analysis: "Danh từ 'city parties' (bữa tiệc thành thị) đã được xác định rõ ràng nhờ câu trước 'went to parties every weekend' (gặp gỡ bạn bè tiệc tùng ở London), do đó bắt buộc phải sử dụng mạo từ xác định 'the'." },
+
+            // Exercise 2 - Text 2: What Makes Life Meaningful?
+            { id: 5, tab: 1, type: "mc", question: "Ex 2.❷ - Blank (1): ...think happiness is (1)______ most important thing...", options: ["a", "an", "the", "Ø"], correct: "the", paragraphId: "p1-block-2", answerLabel: "C. the", evidence: "Many people think happiness is (1)______ most important thing in life.", translation: "Nhiều người nghĩ rằng hạnh phúc là điều quan trọng nhất trong cuộc sống.", synonyms: "the most important = paramount / crucial", analysis: "Đây là cấu trúc so sánh nhất của tính từ dài 'most important thing'. Trong tiếng Anh, mạo từ 'the' luôn đứng trước cấu trúc so sánh nhất." },
+            { id: 6, tab: 1, type: "mc", question: "Ex 2.❷ - Blank (2): ...understanding our true feelings and (2)______.", options: ["need", "needs", "needy", "needed"], correct: "needs", paragraphId: "p1-block-2", answerLabel: "B. needs", evidence: "She believes a meaningful life comes from understanding our true feelings and (2)______.", translation: "Bà tin rằng một cuộc sống có ý nghĩa đến từ việc thấu hiểu cảm xúc thật và các nhu cầu của chính mình.", synonyms: "needs = requirements / desires", analysis: "Liên từ 'and' liên kết hai danh từ đồng đẳng có tính song song. Trước 'and' là danh từ số nhiều 'feelings' (cảm xúc), do vậy phía sau phải điền danh từ số nhiều 'needs' (nhu cầu)." },
+            { id: 7, tab: 1, type: "mc", question: "Ex 2.❷ - Blank (3): When we understand these (3)______, we can live better...", options: ["answers", "problems", "questions", "ideas"], correct: "questions", paragraphId: "p1-block-2", answerLabel: "C. questions", evidence: "When we understand these (3)______, we can live better lives.", translation: "Khi chúng ta hiểu được những câu hỏi này, chúng ta có thể sống tốt hơn.", synonyms: "questions = inquiries / queries", analysis: "Đại từ chỉ định số nhiều 'these' dùng để quy chiếu về một thông tin vừa được nhắc tới ở câu trước: 'ask ourselves good questions. Why do we want...? What do we really need?'. Do đó, danh từ tương hợp duy nhất là 'questions'." },
+            { id: 8, tab: 1, type: "mc", question: "Ex 2.❷ - Blank (4): ...Orbach suggests (4)______ at our problems...", options: ["look", "to look", "looking", "looks"], correct: "looking", paragraphId: "p1-block-2", answerLabel: "C. looking", evidence: "During difficult times, Orbach suggests (4)______ at our problems...", translation: "Trong những thời điểm khó khăn, Orbach đề xuất việc nhìn nhận vấn đề của chúng ta...", synonyms: "suggest looking = propose examining", analysis: "Quy tắc cấu trúc ngữ pháp động từ trong tiếng Anh: Động từ đề xuất 'suggest' đi kèm trực tiếp với một danh động từ: suggest + V-ing." },
+
+            // Exercise 3 - Text 1: The Truth About Love and Relationships
+            { id: 9, tab: 2, type: "mc", question: "Ex 3.❶ - Blank (1): They think they must (1)______ a strong feeling...", options: ["to feel", "feeling", "feel", "feels"], correct: "feel", paragraphId: "p2-block-1", answerLabel: "C. feel", evidence: "They think they must (1)______ a strong feeling immediately when they meet someone special.", translation: "Họ nghĩ họ phải cảm thấy một xúc cảm mạnh mẽ ngay tức khắc khi gặp ai đó đặc biệt.", synonyms: "feel = experience / sense", analysis: "Sau động từ khuyết thiếu (modal verb) chỉ nghĩa bắt buộc 'must', ta sử dụng động từ nguyên mẫu không 'to' (bare infinitive), tức chọn 'feel'." },
+            { id: 10, tab: 2, type: "mc", question: "Ex 3.❶ - Blank (2): (2)______, experts say this is not always true.", options: ["Therefore", "However", "Because", "While"], correct: "However", paragraphId: "p2-block-1", answerLabel: "B. However", evidence: "(2)______, experts say this is not always true.", translation: "Tuy nhiên, các chuyên gia nhận định điều này không phải lúc nào cũng đúng.", synonyms: "However = Nevertheless / Nonetheless", analysis: "Trạng từ liên kết đứng ở đầu câu biểu thị ý đối lập/tương phản với nội dung trước đó, ngăn cách bởi dấu phẩy, chỉ có thể là 'However'. 'Therefore' là trạng từ chỉ kết quả, 'Because' và 'While' là liên từ phụ thuộc kết nối hai vế." },
+            { id: 11, tab: 2, type: "mc", question: "Ex 3.❶ - Blank (3): ...relationships should be easy and (3)______.", options: ["effort", "effortless", "effortlessly", "efforts"], correct: "effortless", paragraphId: "p2-block-1", answerLabel: "B. effortless", evidence: "Some people think good relationships should be easy and (3)______.", translation: "Một số người nghĩ rằng những mối quan hệ tốt đẹp thì phải dễ dàng và không tốn công sức.", synonyms: "effortless = painless / uncomplicated", analysis: "Liên từ 'and' kết nối hai tính từ làm thành phần bổ ngữ đứng sau động từ liên kết 'should be'. Trước 'and' là tính từ 'easy', do vậy từ cần điền ở đây là tính từ 'effortless'." },
+            { id: 12, tab: 2, type: "mc", question: "Ex 3.❶ - Blank (4): Fighting can actually be healthy (4)______ it helps partners...", options: ["because", "while", "therefore", "however"], correct: "because", paragraphId: "p2-block-1", answerLabel: "A. because", evidence: "Fighting can actually be healthy (4)______ it helps partners understand each other's needs better.", translation: "Tranh cãi thực tế lại có thể lành mạnh bởi vì nó giúp các bên thấu hiểu nhu cầu của nhau hơn.", synonyms: "because = since / as / for", analysis: "Vế sau chỉ ra lý do nguyên nhân giải thích vì sao việc tranh cãi lại mang lại hiệu quả lành mạnh cho cặp đôi, vì vậy ta sử dụng liên từ chỉ lý do 'because'." },
+            { id: 13, tab: 2, type: "mc", question: "Ex 3.❶ - Blank (5): This puts too much pressure (5)______ one person.", options: ["in", "at", "for", "on"], correct: "on", paragraphId: "p2-block-1", answerLabel: "D. on", evidence: "This puts too much pressure (5)______ one person.", translation: "Điều này đặt quá nhiều áp lực lên vai một con người.", synonyms: "put pressure on = stress someone out / burden someone", analysis: "Cụm động từ cố định (Collocation) không thể thay thế: 'put pressure on somebody/something' (gây áp lực, đè nặng áp lực lên ai/cái gì)." },
+            { id: 14, tab: 2, type: "mc", question: "Ex 3.❶ - Blank (6): Some couples even sleep in separate (6)______...", options: ["beds", "houses", "rooms", "places"], correct: "rooms", paragraphId: "p2-block-1", answerLabel: "C. rooms", evidence: "Some couples even sleep in separate (6)______ to get better rest...", translation: "Một số cặp đôi thậm chí còn ngủ ở các phòng riêng biệt để có được giấc ngủ ngon hơn...", synonyms: "separate rooms = distinct bedrooms", analysis: "Bài viết thảo luận về xu hướng ngủ phòng riêng của các cặp đôi ('sleep in separate rooms') để có chất lượng giấc ngủ tối ưu, giúp gìn giữ hạnh phúc dài lâu." },
+
+            // Exercise 3 - Text 2: A Teenage Girl's Problem
+            { id: 15, tab: 2, type: "mc", question: "Ex 3.❷ - Blank (1): ...there is (1)______ serious problem in their relationship.", options: ["some", "the", "a", "an"], correct: "a", paragraphId: "p2-block-2", answerLabel: "C. a", evidence: "...but there is (1)______ serious problem in their relationship.", translation: "...nhưng lại xuất hiện một vấn đề nghiêm trọng trong mối quan hệ của họ.", synonyms: "a serious problem = a major issue", analysis: "Cụm danh từ đếm được số ít bắt đầu bằng một phụ âm 'serious problem' và xuất hiện lần đầu tiên, chưa được xác định trước đó nên sử dụng mạo từ 'a'." },
+            { id: 16, tab: 2, type: "mc", question: "Ex 3.❷ - Blank (2): When you (2)______ changing your behaviour...", options: ["are", "were", "have been", "had been"], correct: "are", paragraphId: "p2-block-2", answerLabel: "A. are", evidence: "When you (2)______ changing your behaviour to make someone happy...", translation: "Khi bạn đang liên tục phải thay đổi hành vi của bản thân để làm hài lòng ai đó...", synonyms: "are changing = modify your actions", analysis: "Toàn bộ bài đọc sử dụng thì Hiện tại đơn để nói về chân lý và lời khuyên. Cấu trúc hiện tại tiếp diễn phối hợp 'are changing' chỉ ra trạng thái đang kéo dài ở hiện tại phù hợp với vế sau 'is not good'." },
+            { id: 17, tab: 2, type: "mc", question: "Ex 3.❷ - Blank (3): The (3)______ advice is that...", options: ["expert", "expert's", "experts", "expertise"], correct: "expert's", paragraphId: "p2-block-2", answerLabel: "B. expert's", evidence: "The (3)______ advice is that the girl cannot fix her boyfriend's problems.", translation: "Lời khuyên của chuyên gia là cô bé không thể sửa chữa được các vấn đề của bạn trai cô ấy.", synonyms: "expert's advice = professional recommendation", analysis: "Cấu trúc sở hữu cách (Possessive Noun) đứng trước bổ nghĩa cho danh từ chính 'advice' chỉ xuất xứ nguồn gốc của lời khuyên: 'the expert's advice' (lời khuyên của người chuyên gia)." },
+            { id: 18, tab: 2, type: "mc", question: "Ex 3.❷ - Blank (4): She needs (4)______ to a trusted adult...", options: ["talk", "talking", "to talk", "talked"], correct: "to talk", paragraphId: "p2-block-2", answerLabel: "C. to talk", evidence: "She needs (4)______ to a trusted adult - like a parent or teacher...", translation: "Cô bé cần nói chuyện với một người lớn đáng tin cậy - như cha mẹ hoặc giáo viên...", synonyms: "needs to talk = should speak to", analysis: "Quy tắc ngữ pháp tiếng Anh: Động từ 'need' diễn tả một nhu cầu mang tính chủ động đòi hỏi cấu trúc theo sau là động từ nguyên mẫu có 'to': need + to-V." },
+            { id: 19, tab: 2, type: "mc", question: "Ex 3.❷ - Blank (5): It is very (5)______ to set boundaries...", options: ["import", "importance", "important", "importantly"], correct: "important", paragraphId: "p2-block-2", answerLabel: "C. important", evidence: "It is very (5)______ to set boundaries and protect herself.", translation: "Việc thiết lập các ranh giới và tự bảo vệ bản thân là vô cùng quan trọng.", synonyms: "important = crucial / vital / essential", analysis: "Cấu trúc câu giả định với chủ ngữ giả 'It': 'It is + adj + (for someone) + to-V'. Tính từ bổ ngữ đứng sau trạng từ cường độ 'very' phải là 'important'." },
+            { id: 20, tab: 2, type: "mc", question: "Ex 3.❷ - Blank (6): ...she must tell an adult (6)______.", options: ["immediate", "immediately", "immediateness", "immediacy"], correct: "immediately", paragraphId: "p2-block-2", answerLabel: "B. immediately", evidence: "If someone threatens self-harm, she must tell an adult (6)______.", translation: "Nếu ai đó đe dọa tự làm tổn thương mình, cô phải báo ngay cho người lớn ngay lập tức.", synonyms: "immediately = instantly / at once / without delay", analysis: "Từ cần điền đứng cuối câu bổ nghĩa cho động từ hành động 'tell' (nói, thông báo), do vậy bắt buộc phải chọn trạng từ chỉ cách thức hành động 'immediately'." },
+
+            // Exercise 4 - Text 1: Tom and Rita's Blind Date
+            { id: 21, tab: 3, type: "mc", question: "Ex 4.❶ - Q1: Which of the following is the best title for the text?", options: ["How to Have a Perfect Blind Date", "A Pleasant Date Without Romance", "The Problems of Cat Allergies", "Finding True Love at a Restaurant"], correct: "A Pleasant Date Without Romance", paragraphId: "p3-block-1", answerLabel: "B", evidence: "Everything seemed good, but there was no romantic feeling between them... It was a good date, but not a love match.", translation: "Mọi thứ dường như đều ổn, nhưng không hề có xúc cảm lãng mạn giữa họ... Đó là một buổi hẹn tốt nhưng không thành đôi.", synonyms: "pleasant = nice / enjoyable", analysis: "Buổi hẹn của Tom và Rita diễn ra êm đẹp (ăn tối, trò chuyện vui vẻ chấm 7/10) nhưng không hề có tình cảm yêu đương lãng mạn do sự khác biệt về lối sống (Rita bị dị ứng với mèo của Tom). Tiêu đề 'B' phản ánh đúng nội dung trung tâm nhất." },
+            { id: 22, tab: 3, type: "mc", question: "Ex 4.❶ - Q2: During the date, Tom and Rita talked about ______. ", options: ["their pets and allergies only", "why they don't like blind dates", "food, family, work and past relationships", "their plans to meet again soon"], correct: "food, family, work and past relationships", paragraphId: "p3-block-1", answerLabel: "C", evidence: "They discussed food, their families, their jobs, and past dating experiences.", translation: "Họ đã cùng thảo luận bàn bạc về thức ăn, gia đình, công việc của họ và các trải nghiệm hẹn hò trong quá khứ.", synonyms: "dating experiences = past relationships", analysis: "Đoạn văn số 2 nêu trực tiếp chủ đề cuộc thảo luận trong bữa ăn bao gồm 'food, their families, their jobs, and past dating experiences' tương khớp tuyệt đối với phương án C." },
+            { id: 23, tab: 3, type: "mc", question: "Ex 4.❶ - Q3: What was the biggest problem between Tom and Rita?", options: ["The restaurant booked them for the wrong night.", "Tom's tube card didn't work at the barrier.", "They didn't enjoy their conversation together.", "Tom has a cat, and Rita is allergic to cats."], correct: "Tom has a cat, and Rita is allergic to cats.", paragraphId: "p3-block-1", answerLabel: "D", evidence: "However, the biggest problem appeared during their conversation. Tom told Rita he loves his cat... Unfortunately, Rita is allergic to cats.", translation: "Tuy nhiên, vấn đề lớn nhất xuất hiện trong cuộc hội thoại. Tom nuôi mèo và Rita thì lại dị ứng mèo.", synonyms: "biggest problem = major obstacle", analysis: "Tác giả chỉ rõ bằng trạng từ chỉ sự đặc biệt quan trọng 'the biggest problem' chính là việc Tom nuôi và yêu mèo trong khi Rita lại dị ứng rất nặng." },
+            { id: 24, tab: 3, type: "mc", question: "Ex 4.❶ - Q4: The word 'them' in paragraph 3 refers to ______.", options: ["Tom and Rita", "cats", "drinks", "restaurants"], correct: "Tom and Rita", paragraphId: "p3-block-1", answerLabel: "A", evidence: "After dinner, they went for a drink together. Everything seemed good, but there was no romantic feeling between them.", translation: "Sau khi ăn tối, họ cùng đi uống nước. Mọi thứ trông có vẻ ổn, nhưng không hề có cảm xúc lãng mạn giữa họ (Tom và Rita).", synonyms: "them = the two people on the date", analysis: "Từ nhân xưng 'them' (họ) trong ngữ cảnh của đoạn 3 đang làm bổ ngữ cho từ giới từ 'between' ám chỉ hai nhân vật chính của buổi hẹn là Tom và Rita." },
+            { id: 25, tab: 3, type: "mc", question: "Ex 4.❶ - Q5: Why did Rita decide not to meet Tom again?", options: ["Because she didn't like talking to him.", "Because the date only got 7 out of 10 points.", "Because she didn't want Tom to choose between her and his cat.", "Because Tom didn't want to kiss her goodbye."], correct: "Because she didn't want Tom to choose between her and his cat.", paragraphId: "p3-block-1", answerLabel: "C", evidence: "She explained her reason simply: 'I would never want him to choose between his cat.'", translation: "Cô giải thích lý do một cách đơn giản: 'Tôi không bao giờ muốn anh ấy phải đưa ra sự lựa chọn liên quan đến chú mèo của mình.'", synonyms: "choose between = make a decision / select", analysis: "Rita chia sẻ lý do từ chối gặp lại vì không muốn đẩy Tom vào tình thế tiến thoái lưỡng nan là phải lựa chọn từ bỏ chú mèo cưng của mình chỉ vì cô dị ứng." },
+
+            // Exercise 4 - Text 2: A Family Problem
+            { id: 26, tab: 3, type: "mc", question: "Ex 4.❷ - Q1: According to the passage, what is the doctor's main problem?", options: ["She doesn't have enough money for her house.", "She feels her parents don't value her equally as her brother.", "She wants to work in the family business.", "Her brother is going to retire early."], correct: "She feels her parents don't value her equally as her brother.", paragraphId: "p3-block-2", answerLabel: "B", evidence: "She feels this is very unfair... The doctor feels her parents love and value her brother more than her.", translation: "Cô cảm thấy việc này là cực kỳ bất công... Bác sĩ cảm giác bố mẹ yêu quý và tôn trọng người em trai hơn cô.", synonyms: "value equally = treat fairly / equal recognition", analysis: "Mặc dù có khó khăn về tiền bạc, nhưng cốt lõi nỗi buồn của cô gái (main problem) chính là tâm lý cảm giác mình bị phân biệt đối xử, bố mẹ không trân trọng nâng niu công bằng như em trai." },
+            { id: 27, tab: 3, type: "mc", question: "Ex 4.❷ - Q2: What did the doctor's parents give to her brother?", options: ["Help with university fees only", "A new house and mortgage support", "80% of the family business", "Money for his retirement"], correct: "80% of the family business", paragraphId: "p3-block-2", answerLabel: "C", evidence: "Later, her father gave her brother 80% of the company.", translation: "Về sau, người bố của họ đã trao cho người em trai 80% giá trị doanh nghiệp công ty.", synonyms: "company = family business", analysis: "Chi tiết trong bài ghi rõ người cha đã quyết định chuyển nhượng tặng cho người em trai tỷ lệ cổ phần khổng lồ lên tới 80% tổng tài sản doanh nghiệp gia đình." },
+            { id: 28, tab: 3, type: "mc", question: "Ex 4.❷ - Q3: When the doctor complains to her parents, they ______.", options: ["give her more money immediately", "say she is ungrateful", "decide to sell the business", "ask her brother to share with her"], correct: "say she is ungrateful", paragraphId: "p3-block-2", answerLabel: "B", evidence: "When the doctor talks to her parents about the problem, they become angry. They call her ungrateful.", translation: "Khi cô bác sĩ nói chuyện tâm sự với bố mẹ về vấn đề này, họ đã nổi giận. Họ gọi cô là đứa con vô ơn.", synonyms: "ungrateful = unthankful / appreciative-less", analysis: "Phản ứng của cha mẹ khi nghe cô giãi bày tâm sự là tức giận, bảo cô là đứa con vô ơn ('ungrateful') vì trước đây họ đã từng nuôi ăn học đại học và mua nhà." },
+            { id: 29, tab: 3, type: "mc", question: "Ex 4.❷ - Q4: According to the expert, what is the real problem?", options: ["The doctor needs more money for her mortgage.", "The brother worked harder than the doctor.", "The doctor feels unloved and less valued by her parents.", "The parents are too old to understand."], correct: "The doctor feels unloved and less valued by her parents.", paragraphId: "p3-block-2", answerLabel: "C", evidence: "She says the real problem is not just about money. The doctor feels her parents love and value her brother more than her.", translation: "Chuyên gia nói vấn đề thực sự không nằm ở tài chính. Bác sĩ cảm nhận bố mẹ yêu thương và trân quý em trai hơn cô.", synonyms: "real problem = underlying issue", analysis: "Nhà tâm lý học chỉ ra nguyên căn sâu xa (real problem) là rào cản tinh thần: cô tự ti cảm thấy mình là đứa con 'hạng hai' trong nhà, thiếu đi tình thương và sự trân trọng từ bố mẹ." },
+            { id: 30, tab: 3, type: "mc", question: "Ex 4.❷ - Q5: Which of the following is NOT true about the doctor?", options: ["She received help with university fees and housing from her parents.", "She has problems paying her mortgage.", "Her parents never helped her at all.", "She feels hurt by her parents' favouritism towards her brother."], correct: "Her parents never helped her at all.", paragraphId: "p3-block-2", answerLabel: "C", evidence: "Her parents helped her pay for university fees and housing when she was younger.", translation: "Cha mẹ cô đã từng giúp cô chi trả học phí đại học và tiền nhà khi cô còn trẻ.", synonyms: "never helped = received zero assistance", analysis: "Lựa chọn C khẳng định 'Bố mẹ chưa từng giúp đỡ cô bất kỳ điều gì' là sai sự thật, vì ở đoạn 2 có ghi rõ bố mẹ đã hỗ trợ cô đóng học phí đại học và mua nhà khi cô còn trẻ." },
+
+            // Exercise 5 - Text 1: Start a Garden This New Year
+            { id: 31, tab: 4, type: "select", question: "Ex 5.❶ - Blank (1): ...starting a garden can be a better choice. (1) ______", options: ["A", "B", "C", "D"], correct: "D", paragraphId: "p4-block-1", answerLabel: "D", evidence: "However, starting a garden can be a better choice. (1) [D] It also helps reduce stress...", translation: "Tuy nhiên, bắt đầu làm vườn có thể là quyết định sáng suốt hơn. Việc làm vườn mang lại hoạt động thể dục nhẹ nhàng và thời gian hòa mình vào thiên nhiên.", synonyms: "D = Gardening gives you gentle exercise and time outdoors.", analysis: "Vị trí ô trống bổ nghĩa trực tiếp lý do tại sao làm vườn là sự lựa chọn tối ưu hơn việc tập gym. Câu D giới thiệu các ích lợi sức khỏe thể chất nhẹ nhàng ăn khớp hoàn hảo với đại từ 'It also helps...' ở câu sau." },
+            { id: 32, tab: 4, type: "select", question: "Ex 5.❶ - Blank (2): Don't try to plant too much at first. (2) ______", options: ["A", "B", "C", "D"], correct: "A", paragraphId: "p4-block-1", answerLabel: "A", evidence: "Don't try to plant too much at first. (2) [A] If you plant too many things, you might feel tired...", translation: "Đừng gieo trồng quá nhiều lúc mới bắt đầu. Hãy khởi đầu với một vài chiếc chậu hoặc một luống hoa nhỏ.", synonyms: "A = Start with a few containers or a small flower bed.", analysis: "Lời khuyên 'Đừng gieo trồng quá nhiều lúc đầu' được nối tiếp một cách cụ thể hóa bằng hành động thực tiễn ở câu A: khuyên bắt đầu với diện tích nhỏ (containers, flower bed)." },
+            { id: 33, tab: 4, type: "select", question: "Ex 5.❶ - Blank (3): Water deeply but not too often. (3) ______", options: ["A", "B", "C", "D"], correct: "B", paragraphId: "p4-block-1", answerLabel: "B", evidence: "Water deeply but not too often. (3) [B] Drip irrigation or soaker hoses are simple...", translation: "Hãy tưới sâu nhưng đừng quá thường xuyên. Việc này giúp cây của bạn luôn khỏe mạnh và tiết kiệm nước tốt.", synonyms: "B = This helps keep your plants healthy and saves water.", analysis: "Mạch văn đang nói về kỹ thuật tưới nước hiệu quả (Water deeply but not too often). Do đó, câu B bổ túc ý nghĩa cho phương pháp này giúp tiết kiệm nước ('saves water') là logic hoàn mỹ." },
+            { id: 34, tab: 4, type: "select", question: "Ex 5.❶ - Blank (4): ...remove weeds early before they grow big... (4) ______", options: ["A", "B", "C", "D"], correct: "C", paragraphId: "p4-block-1", answerLabel: "C", evidence: "Also, remove weeds early before they grow big and compete with your plants. (4) [C]", translation: "Bên cạnh đó, hãy loại bỏ cỏ dại từ sớm để tránh cạnh tranh dinh dưỡng. Bạn cũng có thể trồng các loại rau củ ưa thích của mình.", synonyms: "C = You can also grow vegetables that you like to eat.", analysis: "Phương án còn lại C giới thiệu việc tự trồng rau củ sạch phục vụ đời sống hàng ngày để bổ sung phong phú các hoạt động chăm sóc cây trồng." },
+
+            // Exercise 5 - Text 2: Surviving Office Holiday Parties
+            { id: 35, tab: 4, type: "select", question: "Ex 5.2 - Blank (1): Not everyone is a party person, and that's okay. (1) ______", options: ["A", "B", "C", "D"], correct: "B", paragraphId: "p4-block-2", answerLabel: "B", evidence: "Not everyone is a party person, and that's okay. (1) [B]", translation: "Không phải ai cũng thích náo nhiệt tiệc tùng và điều đó hoàn toàn bình thường. Tuy nhiên, luôn có áp lực văn phòng bắt buộc phải tham gia.", synonyms: "B = However, there is pressure in many workplaces to attend and look cheerful.", analysis: "Mạch văn đang đề cập đến việc không thích đi tiệc, liên từ tương phản 'However' trong câu B tạo bước chuyển ý hoàn hảo chỉ ra thực trạng áp lực bắt buộc phải tươi cười tham gia ở công sở." },
+            { id: 36, tab: 4, type: "select", question: "Ex 5.2 - Blank (2): Arrive early when there are fewer people around. (2) ______", options: ["A", "B", "C", "D"], correct: "C", paragraphId: "p4-block-2", answerLabel: "C", evidence: "Arrive early when there are fewer people around. (2) [C] If you stand at the edge...", translation: "Hãy đến sớm khi xung quanh vắng người. Hãy tự đặt mình ở trung tâm khán phòng, tránh trốn sau các góc rìa.", synonyms: "C = Position yourself toward the middle of the room, not hiding at the edges.", analysis: "Câu sau nói về việc 'đứng ở góc rìa phòng khiến bạn cô lập', do đó câu đứng trước bắt buộc phải là câu C khuyên hãy chủ động chọn vị trí đứng gần trung tâm căn phòng ('middle of the room')." },
+            { id: 37, tab: 4, type: "select", question: "Ex 5.2 - Blank (3): Avoid controversial topics like politics or religion. (3) ______", options: ["A", "B", "C", "D"], correct: "A", paragraphId: "p4-block-2", answerLabel: "A", evidence: "Avoid controversial topics like politics or religion. (3) [A]", translation: "Tránh các chủ đề tranh cãi như chính trị và tôn giáo. Khi nói chuyện với sếp lớn, hãy giữ cuộc trò chuyện ngắn và lịch thiệp.", synonyms: "A = When talking to senior leaders, keep your conversation short and courteous.", analysis: "Lời khuyên về giao tiếp xã hội tại bữa tiệc công ty được tiếp nối hài hòa bằng câu A hướng dẫn cách giao tiếp lịch sự ngắn gọn với các vị lãnh đạo cấp cao ('senior leaders')." },
+            { id: 38, tab: 4, type: "select", question: "Ex 5.2 - Blank (4): Look for people standing alone and approach them... (4) ______", options: ["A", "B", "C", "D"], correct: "D", paragraphId: "p4-block-2", answerLabel: "D", evidence: "Look for people standing alone and approach them—they might feel nervous too. (4) [D] For example, decide to talk...", translation: "Hãy tìm kiếm những ai đang đứng một mình và tiếp cận họ. Hãy lên kế hoạch mục tiêu cụ thể và giới hạn thời gian trước khi dự tiệc.", synonyms: "D = Set a clear intention and time limit before you go to the party.", analysis: "Câu phía sau đưa ra một ví dụ minh họa trực quan: 'For example, decide to talk to just one or two...'. Ví dụ này nhằm làm rõ cho ý tưởng thiết lập mục tiêu/ranh giới thời gian ở câu D ('intention and time limit')." }
+        ];
+
+        // Web Audio API Physics Feedback Sound Controller
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSoundFeedback(status) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (status === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.07); 
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.22);
+            } else {
+                // TỐI ƯU ÂM THANH SAI: Đúng chuẩn 0.1s không gây chói tai hay mệt mỏi
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(130.00, audioCtx.currentTime); 
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.10);
+            }
+        }
+
+        // Shuffle Function
+        function shuffleOptions(array) {
+            const output = [...array];
+            for (let i = output.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [output[i], output[j]] = [output[j], output[i]];
+            }
+            return output;
+        }
+
+        // Timer and Progress trackers
+        let timerSeconds = 1500; 
+        let timerInterval = null;
+        let isTimerRunning = false;
+        const totalQuestionsCount = 38;
+        let answeredTracker = {};
+
+        function activateWorkspaceTab(tabId) {
+            document.querySelectorAll('.tab-content-wrapper').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-area-wrapper-${tabId}`).classList.add('active');
+            document.getElementById(`tab-link-${tabId}`).classList.add('active');
+        }
+
+        function toggleTranslationBox(boxId) {
+            const el = document.getElementById(boxId);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function locateElement(targetId) {
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                target.style.transition = "background-color 0.4s ease";
+                const originalBg = target.style.backgroundColor;
+                target.style.backgroundColor = "var(--pastel-highlight)";
+                setTimeout(() => { target.style.backgroundColor = originalBg; }, 1500);
+            }
+        }
+
+        // Timer Application Control
+        const timerDisplay = document.getElementById('timer-display');
+        const timerToggleBtn = document.getElementById('timer-toggle-btn');
+
+        function triggerTimerState() {
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                timerToggleBtn.innerText = "TIẾP TỤC LÀM BÀI";
+                isTimerRunning = false;
+            } else {
+                timerToggleBtn.innerText = "TẠM DỪNG LÀM BÀI";
+                isTimerRunning = true;
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    let mins = Math.floor(timerSeconds / 60);
+                    let secs = timerSeconds % 60;
+                    timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    
+                    if (timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                        timerToggleBtn.disabled = true;
+                        alert("Đã hết giờ làm bài! Con hãy nhấn nút nộp bài để xem kết quả đánh giá năng lực từ chuyên gia nhé.");
+                    }
+                }, 1000);
+            }
+        }
+
+        function updateGlobalProgressMeter() {
+            const answeredCount = Object.keys(answeredTracker).length;
+            const percentage = Math.round((answeredCount / totalQuestionsCount) * 100);
+            document.getElementById('global-progress-bar').style.width = `${percentage}%`;
+        }
+
+        // Selection Response evaluation
+        function checkMultipleChoiceQuestion(questionId, selectedValue, clickedBtn, correctAnswer) {
+            const card = document.getElementById(`q-card-id-${questionId}`);
+            const stack = card.querySelector('.options-vertical-stack');
+            
+            if (stack.dataset.resolved === "true") return;
+            stack.dataset.resolved = "true";
+
+            answeredTracker[questionId] = (selectedValue === correctAnswer);
+            updateGlobalProgressMeter();
+
+            const allButtons = stack.querySelectorAll('.option-button-ui');
+            if (selectedValue === correctAnswer) {
+                clickedBtn.classList.add('ui-correct-active');
+                playSoundFeedback('correct');
+                triggerConfettiAnimation();
+            } else {
+                clickedBtn.classList.add('ui-wrong-active');
+                playSoundFeedback('wrong');
+                allButtons.forEach(btn => {
+                    if (btn.dataset.variant === correctAnswer) btn.classList.add('ui-correct-active');
+                });
+            }
+            document.getElementById(`exp-viewport-id-${questionId}`).style.display = "block";
+        }
+
+        function checkDropdownQuestion(questionId, correctAnswer, selectorControl) {
+            const selectedVal = selectorControl.value;
+            if (!selectedVal) return;
+            
+            selectorControl.disabled = true;
+            answeredTracker[questionId] = (selectedVal === correctAnswer);
+            updateGlobalProgressMeter();
+
+            if (selectedVal === correctAnswer) {
+                selectorControl.classList.add('ui-correct-active');
+                playSoundFeedback('correct');
+                triggerConfettiAnimation();
+            } else {
+                selectorControl.classList.add('ui-wrong-active');
+                playSoundFeedback('wrong');
+            }
+            document.getElementById(`exp-viewport-id-${questionId}`).style.display = "block";
+        }
+
+        // Dynamic Quiz Card Builder engine
+        function renderQuizCardsDynamically() {
+            quizMasterData.forEach(item => {
+                const zone = document.getElementById(`exercise-render-zone-tab${item.tab}`);
+                
+                const card = document.createElement('div');
+                card.className = 'exercise-card';
+                card.id = `q-card-id-${item.id}`;
+
+                const heading = document.createElement('div');
+                heading.className = 'question-header';
+                heading.innerText = item.question;
+                card.appendChild(heading);
+
+                if (item.type === "mc") {
+                    const stack = document.createElement('div');
+                    stack.className = 'options-vertical-stack';
+                    const shuffled = shuffleOptions(item.options);
+                    shuffled.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = 'option-button-ui';
+                        btn.innerText = opt;
+                        btn.dataset.variant = opt;
+                        btn.onclick = () => checkMultipleChoiceQuestion(item.id, opt, btn, item.correct);
+                        stack.appendChild(btn);
+                    });
+                    card.appendChild(stack);
+                } 
+                else if (item.type === "select") {
+                    const select = document.createElement('select');
+                    select.className = 'custom-select';
+                    select.onchange = () => checkDropdownQuestion(item.id, item.correct, select);
+                    
+                    const defOpt = document.createElement('option');
+                    defOpt.value = "";
+                    defOpt.innerText = "-- Kéo cuộn để chọn phương án hoàn chỉnh vế trống --";
+                    select.appendChild(defOpt);
+
+                    item.options.forEach(opt => {
+                        const oNode = document.createElement('option');
+                        oNode.value = opt;
+                        oNode.innerText = `Lựa chọn ghép nối câu: [ Phương án ${opt} ]`;
+                        select.appendChild(oNode);
+                    });
+                    card.appendChild(select);
+                }
+
+                // Four detailed points for each question matching academic goals
+                const exp = document.createElement('div');
+                exp.className = 'explanation-viewport';
+                exp.id = `exp-viewport-id-${item.id}`;
+                exp.innerHTML = `
+                    <div class="exp-data-row"><span class="exp-data-tag">1, ĐÁP ÁN:</span> ${item.answerLabel}</div>
+                    <div class="exp-data-row"><span class="exp-data-tag">2, ĐOẠN CHỨA ĐÁP ÁN:</span> <span style="color:#2c3e50; font-weight:700;">"${item.evidence}"</span></div>
+                    <div class="exp-data-row"><span class="exp-data-tag">3, DỊCH NGHĨA ĐOẠN CHỨA ĐÁP ÁN:</span> <span style="font-style:italic; color:#666;">${item.translation}</span></div>
+                    <div class="exp-data-row"><span class="exp-data-tag">4, CỤM TỪ ĐỒNG NGHĨA & PHÂN TÍCH CHUYÊN SÂU:</span> <span style="color:#e67e22; font-weight:700;">${item.synonyms}</span> — ${item.analysis}</div>
+                    <button class="evidence-locator-link-btn" onclick="locateElement('${item.paragraphId}')">🎯 Vị trí dẫn chứng trong văn bản</button>
+                `;
+                card.appendChild(exp);
+                zone.appendChild(card);
+            });
+        }
+
+        // Evaluation metrics summary score card calculation
+        function evaluateEntireTestPerformance() {
+            const totalCorrect = Object.values(answeredTracker).filter(Boolean).length;
+            document.getElementById('modal-score-txt').innerText = `${totalCorrect} / ${totalQuestionsCount}`;
+            
+            let feedback = "";
+            if (totalCorrect === totalQuestionsCount) {
+                feedback = "🌟 TUYỆT ĐỐI 38/38 CÂU ĐÚNG! Con là một thiên tài tiếng Anh thực thụ! Khả năng quét tìm ý chính, phân loại ngữ pháp và thấu hiểu đại ý của con đạt chuẩn mực IELTS 9.0 Reading. Cô Lê Hằng chúc mừng con nha!";
+            } else if (totalCorrect >= totalQuestionsCount * 0.75) {
+                feedback = "🎉 THÀNH TÍCH RẤT ĐÁNG KHEN! Con đã thể hiện một phong độ làm bài cực kỳ xuất sắc với vốn từ vựng học thuật phong phú. Chỉ cần rà soát thêm một chút ở các cấu trúc ngữ pháp khó là con sẽ đạt điểm tuyệt đối!";
+            } else {
+                feedback = "💪 ĐỪNG NẢN LÒNG NHA CHIẾN BINH! Hãy đọc thật kỹ phần hộp giải thích sâu sắc gồm 4 bước (có phân tích bẫy từ vựng) ở mỗi câu hỏi bên dưới để tích lũy thêm nhiều kinh nghiệm đỉnh cao cho các lần thi sau nhé!";
+            }
+            
+            document.getElementById('modal-comment-txt').innerText = feedback;
+            document.getElementById('score-modal-viewport').style.display = "flex";
+            if (totalCorrect >= totalQuestionsCount * 0.5) triggerConfettiAnimation();
+        }
+
+        function closeDashboardModal() {
+            document.getElementById('score-modal-viewport').style.display = "none";
+        }
+
+        const canvas = document.getElementById("confetti-canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+        let allowConfettiRegen = false; // Biến cờ kiểm soát trạng thái sinh hạt
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+
+        function triggerConfettiAnimation() {
+            resizeCanvas();
+            particles = []; // Làm rỗng mảng để làm sạch màn hình và tối ưu hóa bộ nhớ
+            allowConfettiRegen = true; // Cho phép tái tạo hạt rơi từ trên xuống trong giai đoạn đầu
+
+            // Sinh 80 hạt ban đầu cực kỳ bắt mắt
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * canvas.height,
+                    color: `hsl(${Math.random() * 360}, 95%, 65%)`,
+                    tilt: Math.random() * 10 - 5,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+                    tiltAngle: 0
+                });
+            }
+
+            // Chốt chặn 1 giây: Sau 1000ms sẽ khóa sinh thêm hạt. Các hạt đang rơi sẽ trôi hết xuống và biến mất.
+            setTimeout(() => {
+                allowConfettiRegen = false;
+            }, 1000);
+        }
+
+        function animLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Duyệt ngược mảng hạt để có thể splice an toàn không bị bỏ sót phần tử
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.tiltAngle += p.tiltAngleIncremental;
+                p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                p.x += Math.sin(p.tiltAngle);
+                p.tilt = Math.sin(p.tiltAngle - i / 3) * 15;
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                ctx.stroke();
+
+                // Xử lý khi hạt rơi vượt mép dưới màn hình
+                if (p.y > canvas.height) {
+                    if (allowConfettiRegen) {
+                        // Nếu vẫn trong thời hạn 1 giây, tái tạo hạt mới đẩy lên đỉnh đầu
+                        particles[i] = {
+                            x: Math.random() * canvas.width,
+                            y: -20,
+                            r: p.r,
+                            d: p.d,
+                            color: p.color,
+                            tilt: p.tilt,
+                            tiltAngleIncremental: p.tiltAngleIncremental,
+                            tiltAngle: p.tiltAngle
+                        };
+                    } else {
+                        // Nếu đã quá 1 giây, loại bỏ hạt này khỏi mảng, dọn sạch hoàn toàn Canvas
+                        particles.splice(i, 1);
+                    }
+                }
+            }
+            requestAnimationFrame(animLoop);
+        }
+
+        window.onload = () => {
+            renderQuizCardsDynamically();
+            requestAnimationFrame(animLoop);
+        };
+    </script>
+</body>
+</html>
